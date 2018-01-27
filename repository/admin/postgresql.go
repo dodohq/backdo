@@ -35,7 +35,7 @@ func (r *privateAdminRepo) GetByEmail(email string) (*models.Admin, *models.HTTP
 	query := `SELECT * FROM admins WHERE email = $1`
 	list, err := r.fetch(query, email)
 	if err != nil {
-		return nil, err
+		return nil, models.NewErrorInternalServer(err.Error())
 	}
 
 	a := &models.Admin{}
