@@ -18,7 +18,7 @@ func (r *privateAdminRepo) fetch(query string, args ...interface{}) ([]*models.A
 	results := make([]*models.Admin, 0)
 	for rows.Next() {
 		t := new(models.Admin)
-		err = rows.Scan(&t.Email, &t.Password)
+		err = rows.Scan(&t.ID, &t.Email, &t.Password)
 
 		if err != nil {
 			fmt.Println("ERROR DB:", err)

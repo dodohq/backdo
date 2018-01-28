@@ -10,6 +10,6 @@ var adminRepoMock *repomock.AdminRepoMock
 var adminUsecase usecase.AdminUsecase
 
 func init() {
-	adminRepoMock = repomock.NewAdminRepoMock("password", "nonexistent@dodo.tech")
+	adminRepoMock = repomock.NewAdminRepoMock("password", "nonexistent@dodo.tech", "thisisafakejwt")
 	adminUsecase = admin.NewAdminUsecase(adminRepoMock)
 }

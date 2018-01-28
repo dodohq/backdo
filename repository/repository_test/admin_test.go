@@ -16,9 +16,10 @@ func TestGetByEmail(t *testing.T) {
 	}
 	defer db.Close()
 
+	var fakeID int64 = 1
 	fakeEmail := "stanley@dodo.tech"
 	fakePassword := "stan123"
-	rows := sqlMock.NewRows([]string{"email", "password"}).AddRow(fakeEmail, fakePassword)
+	rows := sqlMock.NewRows([]string{"id", "email", "password"}).AddRow(fakeID, fakeEmail, fakePassword)
 	mock.ExpectQuery(`SELECT \* FROM admins WHERE email = \$1`).WillReturnRows(rows)
 
 	mockAdminRepo := admin.NewAdminRepository(db)
@@ -27,5 +28,5 @@ func TestGetByEmail(t *testing.T) {
 	if err != (*models.HTTPError)(nil) {
 		t.Fatalf(err.Error())
 	}
-	assert.Equal(t, &models.Admin{Email: fakeEmail, Password: fakePassword}, actual)
+	assert.Equal(t, &models.Admin{ID: fakeID, Email: fakeEmail, Password: fakePassword}, actual)
 }

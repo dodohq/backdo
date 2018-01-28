@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/dodohq/backdo/delivery/http/admin"
+	"github.com/dodohq/backdo/delivery/middleware"
 	"github.com/dodohq/backdo/usecase"
 	"github.com/julienschmidt/httprouter"
 )
@@ -15,5 +16,6 @@ type Handler struct {
 func (h *Handler) InitAdminHandler(au usecase.AdminUsecase) *Handler {
 	adminHandler := &admin.Handler{AdminUsecase: au}
 	h.Router.POST("/api/admin/login", adminHandler.Login)
+	h.Router.GET("/api/admin", middleware.AdminAuthy(adminHandler.Dummy))
 	return h
 }

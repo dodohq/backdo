@@ -8,6 +8,12 @@
   version = "v1.1.0"
 
 [[projects]]
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  revision = "dbeaa9332f19a944acb5736b4456cfcc02140e29"
+  version = "v3.1.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/gorilla/schema"
   packages = ["."]
@@ -52,7 +58,7 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["ssh/terminal"]
+  packages = ["bcrypt","blowfish","ssh/terminal"]
   revision = "1875d0a70c90e57f11972aefd42276df65e895b9"
 
 [[projects]]
@@ -70,6 +76,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "03d6989c223ebf12943c9e14fd4cfba386e6d418c6fee2686de8669027172e56"
+  inputs-digest = "6076987aae8e0a7c459f252a93d0a7a052d63ed42806e73f8d1dbebe388e035b"
   solver-name = "gps-cdcl"
   solver-version = 1

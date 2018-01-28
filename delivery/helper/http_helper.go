@@ -14,8 +14,13 @@ import (
 	"github.com/gorilla/schema"
 )
 
-// RenderJSON return json object in http response
-func RenderJSON(w http.ResponseWriter, response []byte) {
+// RenderJSON return json object in the http response
+func RenderJSON(w http.ResponseWriter, obj interface{}) {
+	response, err := json.Marshal(&obj)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(response)
 }

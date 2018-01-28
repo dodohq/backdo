@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -38,5 +39,7 @@ func main() {
 	if isDevEnv {
 		whereToListen = "localhost" + whereToListen
 	}
+
+	fmt.Println("Listening on", whereToListen)
 	log.Fatal(http.ListenAndServe(whereToListen, router))
 }
