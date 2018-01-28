@@ -26,5 +26,8 @@ build:
 build_image: build
 	docker build -t dosms .
 
+build_cmd:
+	go build -o $(GOPATH)/bin/doad cmd/doad/main.go
+
 test:
 	go test -v ./...
