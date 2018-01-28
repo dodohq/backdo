@@ -34,7 +34,7 @@ func main() {
 	httpDeliveryHandler := httpDelivery.Handler{Router: router}
 	httpDeliveryHandler.InitAdminHandler(au)
 
-	whereToListen := ":8080"
+	whereToListen := ":" + os.Getenv("PORT")
 	if isDevEnv {
 		whereToListen = "localhost" + whereToListen
 	}
