@@ -9,7 +9,9 @@ import (
 
 	httpDelivery "github.com/dodohq/backdo/delivery/http"
 	adminRepo "github.com/dodohq/backdo/repository/admin"
+	companyRepo "github.com/dodohq/backdo/repository/company"
 	adminUsecase "github.com/dodohq/backdo/usecase/admin"
+	companyUsecase "github.com/dodohq/backdo/usecase/company"
 	"github.com/joho/godotenv"
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/lib/pq"
@@ -30,10 +32,14 @@ func main() {
 	defer dbConn.Close()
 
 	router := httprouter.New()
+
 	ar := adminRepo.NewAdminRepository(dbConn)
 	au := adminUsecase.NewAdminUsecase(ar)
+	cr := companyRepo.NewCompanyRepository(dbConn)
+	cu := companyUsecase.NewCompanyUsecase(cr)
+
 	httpDeliveryHandler := httpDelivery.Handler{Router: router}
-	httpDeliveryHandler.InitAdminHandler(au)
+	httpDeliveryHandler.InitAdminHandler(au).InitCompanyHandler(cu)
 
 	whereToListen := ":" + os.Getenv("PORT")
 	if isDevEnv {
