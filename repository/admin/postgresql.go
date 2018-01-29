@@ -1,8 +1,6 @@
 package admin
 
 import (
-	"fmt"
-
 	"github.com/dodohq/backdo/models"
 )
 
@@ -10,7 +8,6 @@ func (r *privateAdminRepo) fetch(query string, args ...interface{}) ([]*models.A
 	rows, err := r.Conn.Query(query, args...)
 
 	if err != nil {
-		fmt.Println("ERROR DB:", err)
 		return nil, models.NewErrorInternalServer(err.Error())
 	}
 	defer rows.Close()
@@ -21,7 +18,6 @@ func (r *privateAdminRepo) fetch(query string, args ...interface{}) ([]*models.A
 		err = rows.Scan(&t.ID, &t.Email, &t.Password)
 
 		if err != nil {
-			fmt.Println("ERROR DB:", err)
 			return nil, models.NewErrorInternalServer(err.Error())
 		}
 		results = append(results, t)

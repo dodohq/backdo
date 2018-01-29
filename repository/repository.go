@@ -11,6 +11,6 @@ type AdminRepository interface {
 // CompanyRepository interface for abstraction against third parties interaction
 type CompanyRepository interface {
 	GetAllCompany() ([]*models.Company, *models.HTTPError)
-	InsertNewCompany(*models.Company) (*models.Company, *models.HTTPError)
+	InsertNewCompany(c *models.Company) (*models.Company, *models.HTTPError)
 	DeleteACompany(id int64) (bool, *models.HTTPError)
 }

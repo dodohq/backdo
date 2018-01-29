@@ -18,22 +18,22 @@ func TestGetAllCompany(t *testing.T) {
 	defer db.Close()
 
 	expected := []*models.Company{
-		&models.Company{Name: "Aramex", ContactNumber: "12345678"},
-		&models.Company{Name: "DHL", ContactNumber: "87654321"},
+		&models.Company{ID: 1, Name: "Aramex", ContactNumber: "12345678"},
+		&models.Company{ID: 2, Name: "DHL", ContactNumber: "87654321"},
 	}
 	rows := sqlMock.NewRows(
-		[]string{"name", "contact_numer"},
+		[]string{"id", "name", "contact_numer"},
 	).AddRow(
-		expected[0].Name, expected[1].ContactNumber,
+		expected[0].ID, expected[0].Name, expected[0].ContactNumber,
 	).AddRow(
-		expected[0].Name, expected[1].ContactNumber,
+		expected[1].ID, expected[1].Name, expected[1].ContactNumber,
 	)
-	mock.ExpectQuery(`SELECT \* FROM companies`).WillReturnRows(rows)
+	mock.ExpectQuery(`SELECT (.+) FROM companies`).WillReturnRows(rows)
 
 	mockCompanyRepo := company.NewCompanyRepository(db)
 
 	actual, err := mockCompanyRepo.GetAllCompany()
-	if err != nil {
+	if err != (*models.HTTPError)(nil) {
 		t.Fatalf(err.Error())
 		return
 	}
@@ -48,13 +48,13 @@ func TestInsertNewCompany(t *testing.T) {
 	defer db.Close()
 
 	expected := &models.Company{ID: 1, Name: "Aramex", ContactNumber: "12345678"}
-	result := sqlMock.NewResult(expected.ID, 1)
-	mock.ExpectExec(`INSERT INTO companies`).WillReturnResult(result)
+	result := sqlMock.NewRows([]string{"id"}).AddRow(expected.ID)
+	mock.ExpectQuery(`INSERT INTO companies`).WillReturnRows(result)
 
 	mockCompanyRepo := company.NewCompanyRepository(db)
 
 	actual, err := mockCompanyRepo.InsertNewCompany(expected)
-	if err != nil {
+	if err != (*models.HTTPError)(nil) {
 		t.Fatalf(err.Error())
 		return
 	}
@@ -69,12 +69,13 @@ func TestDeleteACompany(t *testing.T) {
 	defer db.Close()
 
 	result := sqlMock.NewResult(0, 1)
-	mock.ExpectExec(`UPDATE companies`).WillReturnResult(result)
+	mock.ExpectPrepare(`UPDATE companies SET deleted = TRUE WHERE id = \$1`)
+	mock.ExpectExec(`UPDATE companies SET deleted = TRUE WHERE id = \$1`).WillReturnResult(result)
 
 	mockCompanyRepo := company.NewCompanyRepository(db)
 
 	outcome, err := mockCompanyRepo.DeleteACompany(1)
-	if err != nil {
+	if err != (*models.HTTPError)(nil) {
 		t.Fatalf(err.Error())
 		return
 	}
