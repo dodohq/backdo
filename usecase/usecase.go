@@ -6,3 +6,10 @@ import "github.com/dodohq/backdo/models"
 type AdminUsecase interface {
 	Login(email, password string) (string, *models.HTTPError)
 }
+
+// CompanyUsecase usecase interface for handling company endpoints
+type CompanyUsecase interface {
+	GetAllCompanies() ([]*models.Company, *models.HTTPError)
+	OnboardNewCompany(c *models.Company) (*models.Company, *models.HTTPError)
+	DeleteACompany(id int64) (bool, *models.HTTPError)
+}
