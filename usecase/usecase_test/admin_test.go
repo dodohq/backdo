@@ -30,7 +30,7 @@ func TestLogin(t *testing.T) {
 			}
 		} else if i == 1 && err.StatusCode != http.StatusUnauthorized {
 			t.Errorf("Expected %d, Got %d. Error Msg: %s", http.StatusUnauthorized, err.StatusCode, err.Error())
-		} else if i == 2 && err.StatusCode != http.StatusNotFound {
+		} else if i == 2 && err.StatusCode != http.StatusUnauthorized {
 			t.Errorf("Expected %d, Got %d. Error Msg: %s", http.StatusNotFound, err.StatusCode, err.Error())
 		}
 	}

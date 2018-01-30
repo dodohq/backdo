@@ -19,7 +19,7 @@ type AdminRepoMock struct {
 func (m *AdminRepoMock) GetByEmail(email string) (*models.Admin, *models.HTTPError) {
 	args := m.Called(email)
 	if args.String(0) == m.NonExistentEmail {
-		return nil, models.NewErrorNotFound("Email Not Found")
+		return nil, nil
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(m.UniversalPassword), 14)

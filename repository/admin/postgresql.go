@@ -34,12 +34,9 @@ func (r *privateAdminRepo) GetByEmail(email string) (*models.Admin, *models.HTTP
 		return nil, models.NewErrorInternalServer(err.Error())
 	}
 
-	a := &models.Admin{}
-	if len(list) > 0 {
-		a = list[0]
-	} else {
-		return nil, models.NewErrorNotFound("Email Not Found")
+	if len(list) < 1 {
+		return nil, nil
 	}
 
-	return a, nil
+	return list[0], nil
 }

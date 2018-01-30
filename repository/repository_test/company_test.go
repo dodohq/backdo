@@ -40,6 +40,26 @@ func TestGetAllCompany(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
+func TestGetCompanyByID(t *testing.T) {
+	db, mock, err := sqlMock.New()
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+	defer db.Close()
+
+	fakeC := &models.Company{ID: 1, Name: "Aramex", ContactNumber: "12345678"}
+	rows := sqlMock.NewRows([]string{"id", "name", "contact_number"}).AddRow(fakeC.ID, fakeC.Name, fakeC.ContactNumber)
+	mock.ExpectQuery(`SELECT (.+) FROM companies WHERE id = \$1 AND NOT deleted`).WillReturnRows(rows)
+
+	mockCompanyRepo := company.NewCompanyRepository(db)
+
+	actual, err := mockCompanyRepo.GetCompanyByID(fakeC.ID)
+	if err != (*models.HTTPError)(nil) {
+		t.Fatalf(err.Error())
+	}
+	assert.Equal(t, fakeC, actual)
+}
+
 func TestInsertNewCompany(t *testing.T) {
 	db, mock, err := sqlMock.New()
 	if err != nil {

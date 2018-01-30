@@ -16,4 +16,10 @@ type CompanyUsecase interface {
 
 // UserUsecase usercase interface for handling user endpoints
 type UserUsecase interface {
+	GetAllUsers() ([]*models.User, *models.HTTPError)
+	CreateNewUser(u *models.User) *models.HTTPError
+	DeleteAnAccount(id int64) *models.HTTPError
+	Login(email, password string) (string, *models.HTTPError)
+	ForgotPassword(email string) *models.HTTPError
+	ResetPassword(email, newPassword string) *models.HTTPError
 }

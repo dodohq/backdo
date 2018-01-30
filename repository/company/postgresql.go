@@ -40,6 +40,21 @@ func (r *privateCompanyRepo) GetAllCompany() ([]*models.Company, *models.HTTPErr
 	return companiesList, nil
 }
 
+// GetCompanyByID get partner by ID
+func (r *privateCompanyRepo) GetCompanyByID(id int64) (*models.Company, *models.HTTPError) {
+	query := `SELECT id, name, contact_number FROM companies WHERE id = $1 AND NOT deleted`
+	list, err := r.fetch(query, id)
+	if err != nil {
+		return nil, models.NewErrorInternalServer(err.Error())
+	}
+
+	if len(list) < 1 {
+		return nil, nil
+	}
+
+	return list[0], nil
+}
+
 // InsertNewCompany onboard a new partner company
 func (r *privateCompanyRepo) InsertNewCompany(c *models.Company) (*models.Company, *models.HTTPError) {
 	query := `INSERT INTO companies (name, contact_number) VALUES ($1, $2) RETURNING id`

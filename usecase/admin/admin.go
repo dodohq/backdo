@@ -17,6 +17,8 @@ func (u *privateAdminUsecase) Login(username, password string) (string, *models.
 	admin, err := u.adminRepo.GetByEmail(username)
 	if err != (*models.HTTPError)(nil) {
 		return "", err
+	} else if admin == (*models.Admin)(nil) {
+		return "", models.NewErrorUnauthorized("Invalid Email")
 	}
 
 	// check password

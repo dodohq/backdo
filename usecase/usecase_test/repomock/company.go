@@ -17,6 +17,13 @@ func (m *CompanyRepoMock) GetAllCompany() ([]*models.Company, *models.HTTPError)
 	return args[0].([]*models.Company), args[1].(*models.HTTPError)
 }
 
+// GetCompanyByID mock of func
+func (m *CompanyRepoMock) GetCompanyByID(id int64) (*models.Company, *models.HTTPError) {
+	args := m.Called(id)
+
+	return args[0].(*models.Company), args[1].(*models.HTTPError)
+}
+
 // InsertNewCompany mock of func
 func (m *CompanyRepoMock) InsertNewCompany(c *models.Company) (*models.Company, *models.HTTPError) {
 	args := m.Called(c)
