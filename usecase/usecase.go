@@ -13,3 +13,7 @@ type CompanyUsecase interface {
 	OnboardNewCompany(c *models.Company) (*models.Company, *models.HTTPError)
 	DeleteACompany(id int64) (bool, *models.HTTPError)
 }
+
+// UserUsecase usercase interface for handling user endpoints
+type UserUsecase interface {
+}

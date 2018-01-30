@@ -7,7 +7,7 @@ import (
 
 // GenerateJWT generate jwt from admin object
 func (r *privateAdminRepo) GenerateJWT(a *models.Admin) (string, *models.HTTPError) {
-	token, err := jwt.CreateToken(*a, true, false)
+	token, err := jwt.CreateToken(*a, jwt.AdminType)
 	if err != nil {
 		return "", models.NewErrorInternalServer(err.Error())
 	}

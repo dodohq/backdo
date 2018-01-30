@@ -4,7 +4,7 @@ import (
 	"github.com/dodohq/backdo/models"
 )
 
-func (r *privateAdminRepo) fetch(query string, args ...interface{}) ([]*models.Admin, *models.HTTPError) {
+func (r *privateAdminRepo) fetch(query string, args ...interface{}) ([]*models.Admin, error) {
 	rows, err := r.Conn.Query(query, args...)
 
 	if err != nil {
@@ -18,7 +18,7 @@ func (r *privateAdminRepo) fetch(query string, args ...interface{}) ([]*models.A
 		err = rows.Scan(&t.ID, &t.Email, &t.Password)
 
 		if err != nil {
-			return nil, models.NewErrorInternalServer(err.Error())
+			return nil, err
 		}
 		results = append(results, t)
 	}

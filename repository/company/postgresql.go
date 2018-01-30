@@ -6,7 +6,7 @@ import (
 	"github.com/dodohq/backdo/models"
 )
 
-func (r *privateCompanyRepo) fetch(query string, args ...interface{}) ([]*models.Company, *models.HTTPError) {
+func (r *privateCompanyRepo) fetch(query string, args ...interface{}) ([]*models.Company, error) {
 	rows, err := r.Conn.Query(query, args...)
 
 	if err != nil {
@@ -32,7 +32,12 @@ func (r *privateCompanyRepo) fetch(query string, args ...interface{}) ([]*models
 // GetAllCompany get all partner companies
 func (r *privateCompanyRepo) GetAllCompany() ([]*models.Company, *models.HTTPError) {
 	query := `SELECT id, name, contact_number FROM companies WHERE NOT deleted`
-	return r.fetch(query)
+	companiesList, err := r.fetch(query)
+	if err != nil {
+		return nil, models.NewErrorInternalServer(err.Error())
+	}
+
+	return companiesList, nil
 }
 
 // InsertNewCompany onboard a new partner company
@@ -50,7 +55,7 @@ func (r *privateCompanyRepo) InsertNewCompany(c *models.Company) (*models.Compan
 
 // DeleteACompany delete a company from db
 func (r *privateCompanyRepo) DeleteACompany(id int64) (bool, *models.HTTPError) {
-	query := `UPDATE companies SET deleted = TRUE WHERE id = $1`
+	query := `UPDATE companies SET deleted = TRUE WHERE id = $1 AND NOT deleted`
 	stmt, err := r.Conn.Prepare(query)
 	if err != nil {
 		return false, models.NewErrorInternalServer(err.Error())
