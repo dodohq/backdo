@@ -26,3 +26,13 @@ type UserRepository interface {
 	GenerateJWT(u *models.User) (string, *models.HTTPError)
 	SendEmailToUser(u *models.User, subject, body string) *models.HTTPError
 }
+
+// DeliveryRepository interface for abstraction against third parties interaction
+type DeliveryRepository interface {
+	GetAllDeliveries() ([]*models.Delivery, *models.HTTPError)
+	GetDeliveriesByCompanyID(id int64) ([]*models.Delivery, *models.HTTPError)
+	GetDeliveryByID(id int64) (*models.Delivery, *models.HTTPError)
+	InsertDelivery(d *models.Delivery) (*models.Delivery, *models.HTTPError)
+	BulkInsertDelivery(deliveryList []*models.Delivery) ([]*models.Delivery, *models.HTTPError)
+	DeleteDelivery(id int64) *models.HTTPError
+}

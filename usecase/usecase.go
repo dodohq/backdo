@@ -14,7 +14,7 @@ type CompanyUsecase interface {
 	DeleteACompany(id int64) (bool, *models.HTTPError)
 }
 
-// UserUsecase usercase interface for handling user endpoints
+// UserUsecase usecase interface for handling user endpoints
 type UserUsecase interface {
 	GetAllUsers() ([]*models.User, *models.HTTPError)
 	CreateNewUser(u *models.User) *models.HTTPError
@@ -22,4 +22,14 @@ type UserUsecase interface {
 	Login(email, password string) (string, *models.HTTPError)
 	ForgotPassword(email string) *models.HTTPError
 	ResetPassword(email, newPassword string) *models.HTTPError
+}
+
+// DeliveryUsecase usecase interface for handling delivery endpoints
+type DeliveryUsecase interface {
+	GetAllDeliveries() ([]*models.Delivery, *models.HTTPError)
+	GetDeliveriesByCompanyID(id int64) ([]*models.Delivery, *models.HTTPError)
+	GetDeliveryByID(id int64) (*models.Delivery, *models.HTTPError)
+	CreateNewDelivery(d *models.Delivery) (*models.Delivery, *models.HTTPError)
+	BulkCreateDeliveries(list []*models.Delivery) ([]*models.Delivery, *models.HTTPError)
+	DeleteDelivery(id int64) *models.HTTPError
 }

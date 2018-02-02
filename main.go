@@ -11,9 +11,11 @@ import (
 	httpDelivery "github.com/dodohq/backdo/delivery/http"
 	adminRepo "github.com/dodohq/backdo/repository/admin"
 	companyRepo "github.com/dodohq/backdo/repository/company"
+	deliveryRepo "github.com/dodohq/backdo/repository/delivery"
 	userRepo "github.com/dodohq/backdo/repository/user"
 	adminUsecase "github.com/dodohq/backdo/usecase/admin"
 	companyUsecase "github.com/dodohq/backdo/usecase/company"
+	deliveryUsecase "github.com/dodohq/backdo/usecase/delivery"
 	userUsecase "github.com/dodohq/backdo/usecase/user"
 	"github.com/joho/godotenv"
 	"github.com/julienschmidt/httprouter"
@@ -41,12 +43,14 @@ func main() {
 	ar := adminRepo.NewAdminRepository(dbConn)
 	au := adminUsecase.NewAdminUsecase(ar)
 	cr := companyRepo.NewCompanyRepository(dbConn)
+	dr := deliveryRepo.NewDeliveryRepository(dbConn)
 	cu := companyUsecase.NewCompanyUsecase(cr)
 	ur := userRepo.NewUserRepo(dbConn, &auth)
 	uu := userUsecase.NewUserUsecase(ur, cr)
+	du := deliveryUsecase.NewDeliveryUsecase(dr, cr)
 
 	httpDeliveryHandler := httpDelivery.Handler{Router: router}
-	httpDeliveryHandler.InitAdminHandler(au).InitCompanyHandler(cu).InitUserHandler(uu)
+	httpDeliveryHandler.InitAdminHandler(au).InitCompanyHandler(cu).InitUserHandler(uu).InitDeliveryHandler(du)
 
 	whereToListen := ":" + os.Getenv("PORT")
 	if isDevEnv {

@@ -3,6 +3,7 @@ package http
 import (
 	"github.com/dodohq/backdo/delivery/http/admin"
 	"github.com/dodohq/backdo/delivery/http/company"
+	"github.com/dodohq/backdo/delivery/http/delivery"
 	"github.com/dodohq/backdo/delivery/http/user"
 	"github.com/dodohq/backdo/delivery/middleware"
 	"github.com/dodohq/backdo/usecase"
@@ -40,5 +41,15 @@ func (h *Handler) InitUserHandler(uu usecase.UserUsecase) *Handler {
 	h.Router.POST("/api/user/login", userHandler.Login)
 	h.Router.POST("/api/user/reset_password", middleware.UserAuthy(userHandler.ResetPassword))
 	h.Router.DELETE("/api/user/:id", middleware.AdminAuthy(userHandler.DeleteAccount))
+	return h
+}
+
+// InitDeliveryHandler initialize delivery endpoints
+func (h *Handler) InitDeliveryHandler(du usecase.DeliveryUsecase) *Handler {
+	deliveryHandler := &delivery.Handler{DeliveryUsecase: du}
+	h.Router.GET("/api/delivery", middleware.UserAuthy(deliveryHandler.GetAllDeliveries))
+	h.Router.POST("/api/delivery", middleware.UserAuthy(deliveryHandler.CreateNewDelivery))
+	h.Router.POST("/api/delivery/bulk", middleware.UserAuthy(deliveryHandler.BulkCreateDeliveries))
+	h.Router.DELETE("/api/delivery/:id", middleware.UserAuthy(deliveryHandler.DeleteADelivery))
 	return h
 }

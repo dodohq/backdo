@@ -96,7 +96,7 @@ func (r *privateUserRepo) fetch(query string, args ...interface{}) ([]*models.Us
 	rows, err := r.Conn.Query(query, args...)
 
 	if err != nil {
-		return nil, models.NewErrorInternalServer(err.Error())
+		return nil, err
 	}
 	defer rows.Close()
 
