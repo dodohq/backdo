@@ -36,3 +36,15 @@ type DeliveryRepository interface {
 	BulkInsertDelivery(deliveryList []*models.Delivery) ([]*models.Delivery, *models.HTTPError)
 	DeleteDelivery(id int64) *models.HTTPError
 }
+
+// DriverRepository interface for abstraction against third parties interaction
+type DriverRepository interface {
+	FetchDriversByCompany(id int64) ([]*models.Driver, *models.HTTPError)
+	FetchDriverByID(id int64) (*models.Driver, *models.HTTPError)
+	FetchDriverByPhoneNumber(phoneNo string) (*models.Driver, *models.HTTPError)
+	InsertNewDriver(d *models.Driver) (*models.Driver, *models.HTTPError)
+	DeleteDriver(id int64) *models.HTTPError
+	RequestVerificationCode(via string, countryCode int, phoneNumber string) *models.HTTPError
+	VerifyAuthyCode(countryCode int, phoneNumber, verificationCode string) *models.HTTPError
+	GenerateJWT(d *models.Driver) (string, *models.HTTPError)
+}

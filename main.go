@@ -12,10 +12,12 @@ import (
 	adminRepo "github.com/dodohq/backdo/repository/admin"
 	companyRepo "github.com/dodohq/backdo/repository/company"
 	deliveryRepo "github.com/dodohq/backdo/repository/delivery"
+	driverRepo "github.com/dodohq/backdo/repository/driver"
 	userRepo "github.com/dodohq/backdo/repository/user"
 	adminUsecase "github.com/dodohq/backdo/usecase/admin"
 	companyUsecase "github.com/dodohq/backdo/usecase/company"
 	deliveryUsecase "github.com/dodohq/backdo/usecase/delivery"
+	driverUsecase "github.com/dodohq/backdo/usecase/driver"
 	userUsecase "github.com/dodohq/backdo/usecase/user"
 	"github.com/joho/godotenv"
 	"github.com/julienschmidt/httprouter"
@@ -44,13 +46,15 @@ func main() {
 	au := adminUsecase.NewAdminUsecase(ar)
 	cr := companyRepo.NewCompanyRepository(dbConn)
 	dr := deliveryRepo.NewDeliveryRepository(dbConn)
+	drr := driverRepo.NewDriverRepository(dbConn)
 	cu := companyUsecase.NewCompanyUsecase(cr)
 	ur := userRepo.NewUserRepo(dbConn, &auth)
 	uu := userUsecase.NewUserUsecase(ur, cr)
 	du := deliveryUsecase.NewDeliveryUsecase(dr, cr)
+	dru := driverUsecase.NewDriverUsecase(drr, cr)
 
 	httpDeliveryHandler := httpDelivery.Handler{Router: router}
-	httpDeliveryHandler.InitAdminHandler(au).InitCompanyHandler(cu).InitUserHandler(uu).InitDeliveryHandler(du)
+	httpDeliveryHandler.InitAdminHandler(au).InitCompanyHandler(cu).InitUserHandler(uu).InitDeliveryHandler(du).InitDriverHandler(dru)
 
 	whereToListen := ":" + os.Getenv("PORT")
 	if isDevEnv {

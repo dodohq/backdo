@@ -33,3 +33,14 @@ type DeliveryUsecase interface {
 	BulkCreateDeliveries(list []*models.Delivery) ([]*models.Delivery, *models.HTTPError)
 	DeleteDelivery(id int64) *models.HTTPError
 }
+
+// DriverUsecase usecase interface for handling driver endpoints
+type DriverUsecase interface {
+	GetAllDriversOfCompany(id int64) ([]*models.Driver, *models.HTTPError)
+	GetDriverByID(id int64) (*models.Driver, *models.HTTPError)
+	GetDriverByPhoneNumber(phoneNo string) (*models.Driver, *models.HTTPError)
+	CreateDriverProfile(d *models.Driver) (*models.Driver, *models.HTTPError)
+	RemoveDriverProfile(id int64) *models.HTTPError
+	RequestForVerificationCode(via string, countryCode int, phoneNumber string) *models.HTTPError
+	AuthenticateDriver(countryCode int, phoneNumber, verificationCode string) (string, *models.HTTPError)
+}

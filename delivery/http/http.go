@@ -4,6 +4,7 @@ import (
 	"github.com/dodohq/backdo/delivery/http/admin"
 	"github.com/dodohq/backdo/delivery/http/company"
 	"github.com/dodohq/backdo/delivery/http/delivery"
+	"github.com/dodohq/backdo/delivery/http/driver"
 	"github.com/dodohq/backdo/delivery/http/user"
 	"github.com/dodohq/backdo/delivery/middleware"
 	"github.com/dodohq/backdo/usecase"
@@ -51,5 +52,17 @@ func (h *Handler) InitDeliveryHandler(du usecase.DeliveryUsecase) *Handler {
 	h.Router.POST("/api/delivery", middleware.UserAuthy(deliveryHandler.CreateNewDelivery))
 	h.Router.POST("/api/delivery/bulk", middleware.UserAuthy(deliveryHandler.BulkCreateDeliveries))
 	h.Router.DELETE("/api/delivery/:id", middleware.UserAuthy(deliveryHandler.DeleteADelivery))
+	return h
+}
+
+// InitDriverHandler initialize driver endpoints
+func (h *Handler) InitDriverHandler(du usecase.DriverUsecase) *Handler {
+	driverHandler := &driver.Handler{DriverUsecase: du}
+	h.Router.GET("/api/driver", middleware.UserAuthy(driverHandler.GetAllDriversOfCompany))
+	h.Router.POST("/api/driver", middleware.UserAuthy(driverHandler.CreateNewDriverProfile))
+	h.Router.PUT("/api/driver", middleware.UserAuthy(driverHandler.UpdateDriverProfile))
+	h.Router.DELETE("/api/driver/:id", middleware.UserAuthy(driverHandler.DeleteDriverProfile))
+	h.Router.POST("/api/driver/verification_code", driverHandler.RequestVerificationCode)
+	h.Router.POST("/api/driver/check_verification", driverHandler.VerifyPhoneNumber)
 	return h
 }
